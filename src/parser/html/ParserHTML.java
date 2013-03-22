@@ -31,7 +31,6 @@ public class ParserHTML {
         try {
 
             while ((text = reader.readLine()) != null) {
-                //text = text.replaceAll();
                 Pattern p = Pattern.compile(patternURL);
                 Matcher m = p.matcher(text);
 
