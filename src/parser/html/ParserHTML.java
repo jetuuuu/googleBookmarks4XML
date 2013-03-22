@@ -16,7 +16,7 @@ public class ParserHTML {
 
     private String dir;
     private ArrayList<String> listURL;
-    private String patternURL = "<http:\\S*\\\\/>";
+    private String patternURL = "\\s*\"[^\"]*\""; //"<a.*?(\\s)href\\s*=\\s*\"[^\"]*\"";
 
     public ParserHTML(String path) {
         listURL = new ArrayList<String>();
@@ -31,11 +31,12 @@ public class ParserHTML {
         try {
 
             while ((text = reader.readLine()) != null) {
-                Pattern p = Pattern.compile(patternURL);
+                Pattern p = Pattern.compile(patternURL, Pattern.CASE_INSENSITIVE);
                 Matcher m = p.matcher(text);
 
-                if (m.matches()) {
+                if (m.find()) {
                     this.listURL.add(m.group());
+                    //System.out.println("1");
                 }
             }
 
