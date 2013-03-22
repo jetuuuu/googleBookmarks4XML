@@ -16,7 +16,7 @@ public class ParserHTML {
 
     private String dir;
     private ArrayList<String> listURL;
-    private String patternURL = "\\s*\"[^\"]*\""; //"<a.*?(\\s)href\\s*=\\s*\"[^\"]*\"";
+    private String patternURL = "http:\\S+\"[^\"]*\"";
 
     public ParserHTML(String path) {
         listURL = new ArrayList<String>();
@@ -36,7 +36,6 @@ public class ParserHTML {
 
                 if (m.find()) {
                     this.listURL.add(m.group());
-                    //System.out.println("1");
                 }
             }
 
@@ -51,7 +50,8 @@ public class ParserHTML {
 
         try {
             this.parseURL();
-        } catch (FileNotFoundException error) {
+        }
+        catch (FileNotFoundException error) {
             error.printStackTrace();
         }
 
