@@ -19,34 +19,19 @@ public class Main {
         ArrayList<String> URL = pars.getURL();
         ArrayList<String> name = pars.getName();
 
-        //CreateXML creater = new CreateXML("/Users/nikita/Documents/test.xml");
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-
-        Document doc = builder.newDocument();
-        Element rootElement = doc.createElement("bookmarks");
+        CreateXML creater = new CreateXML("/Users/nikita/Documents/test.xml");
+        creater.init();
 
         for(int i = 0; i < URL.size() - 1; i++) {
             try {
-                Element nameElementTitle = doc.createElement("title");
-                nameElementTitle.appendChild(doc.createTextNode(name.get(i)));
-                rootElement.appendChild(nameElementTitle);
-
-                Element nameElementSite = doc.createElement("site");
-                nameElementSite.appendChild(doc.createTextNode(URL.get(i)));
-                rootElement.appendChild(nameElementSite);
+                creater.saveToXML(name.get(i), URL.get(i));
             }
             catch (Exception error) {
                 error.printStackTrace();
             }
         }
 
-        doc.appendChild(rootElement);
-
-        Transformer t = TransformerFactory.newInstance().newTransformer();
-        t.setOutputProperty(OutputKeys.METHOD, "xml");
-        t.setOutputProperty(OutputKeys.INDENT, "yes");
-        t.transform(new DOMSource(doc), new StreamResult(new FileOutputStream("/Users/nikita/Documents/test.xml")));
+        creater.end();
 
         System.out.println("Time: " + (System.currentTimeMillis() - startTime));
     }
