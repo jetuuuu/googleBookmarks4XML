@@ -30,7 +30,7 @@ public class CreateXML {
         this.builder = factory.newDocumentBuilder();
     }
 
-    private void writeParamXML(String url, String name) throws FileNotFoundException, TransformerException {
+    private void writeParamXML(String url, String name, String date) throws FileNotFoundException, TransformerException {
 
         Element nameElementTitle = this.doc.createElement("title");
         nameElementTitle.appendChild(this.doc.createTextNode(name));
@@ -39,6 +39,10 @@ public class CreateXML {
         Element nameElementSite = this.doc.createElement("site");
         nameElementSite.appendChild(this.doc.createTextNode(url));
         this.rootElement.appendChild(nameElementSite);
+
+        Element nameElementDate = this.doc.createElement("add_date");
+        nameElementDate.appendChild(this.doc.createTextNode(date));
+        this.rootElement.appendChild(nameElementDate);
 
     }
 
@@ -53,10 +57,10 @@ public class CreateXML {
         }
     }
 
-    public void saveToXML(String url, String name) {
+    public void saveToXML(String url, String name, String date) {
 
         try {
-            this.writeParamXML(url, name);
+            this.writeParamXML(url, name, date);
         }
         catch (Exception error) {
             error.printStackTrace();
