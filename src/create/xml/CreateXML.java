@@ -19,6 +19,7 @@ public class CreateXML {
     private String dir;
     private DocumentBuilder builder;
     private Document doc;
+    private Element rootElement;
 
     public CreateXML(String path) {
         this.dir = path;
@@ -30,33 +31,47 @@ public class CreateXML {
     }
 
     private void writeParamXML(String url, String name) throws FileNotFoundException, TransformerException {
-        this.doc = this.builder.newDocument();
-        Element rootElement = this.doc.createElement("bookmarks");
 
         Element nameElementTitle = this.doc.createElement("title");
         nameElementTitle.appendChild(this.doc.createTextNode(name));
-        rootElement.appendChild(nameElementTitle);
+        this.rootElement.appendChild(nameElementTitle);
 
         Element nameElementSite = this.doc.createElement("site");
         nameElementSite.appendChild(this.doc.createTextNode(url));
-        rootElement.appendChild(nameElementSite);
+        this.rootElement.appendChild(nameElementSite);
 
-        this.doc.appendChild(rootElement);
+    }
 
-        Transformer t = TransformerFactory.newInstance().newTransformer();
-        t.transform(new DOMSource(this.doc), new StreamResult(new FileOutputStream(this.dir)));
+    public void init() {
+        try {
+            this.paramLangXML();
+            this.doc = this.builder.newDocument();
+            this.rootElement = this.doc.createElement("bookmarks");
+        }
+        catch (Exception error) {
+            error.printStackTrace();
+        }
     }
 
     public void saveToXML(String url, String name) {
 
         try {
-            this.paramLangXML();
             this.writeParamXML(url, name);
         }
         catch (Exception error) {
             error.printStackTrace();
         }
 
+    }
+
+    public void end() throws FileNotFoundException, TransformerException {
+
+        this.doc.appendChild(this.rootElement);
+
+        Transformer t = TransformerFactory.newInstance().newTransformer();
+        t.setOutputProperty(OutputKeys.METHOD, "xml");
+        t.setOutputProperty(OutputKeys.INDENT, "yes");
+        t.transform(new DOMSource(this.doc), new StreamResult(new FileOutputStream(this.dir)));
     }
 
 }
