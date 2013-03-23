@@ -18,13 +18,14 @@ public class Main {
         ParserHTML pars = new ParserHTML("/Users/nikita/Documents/bookmarks_chrome.html");
         ArrayList<String> URL = pars.getURL();
         ArrayList<String> name = pars.getName();
+        ArrayList<String> date = pars.getDate();
 
         CreateXML creater = new CreateXML("/Users/nikita/Documents/test.xml");
         creater.init();
 
         for(int i = 0; i < URL.size() - 1; i++) {
             try {
-                creater.saveToXML(name.get(i), URL.get(i));
+                creater.saveToXML(name.get(i), URL.get(i), date.get(i));
             }
             catch (Exception error) {
                 error.printStackTrace();
