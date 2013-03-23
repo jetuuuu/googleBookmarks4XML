@@ -16,32 +16,59 @@ public class ParserHTML {
 
     private String dir;
     private ArrayList<String> listURL;
+    private ArrayList<String> listName;
     private String patternURL = "http:\\S+\"[^\"]*\"";
+    private String patternName = "<a(.*)>(.*)<\\Sa>";
 
     public ParserHTML(String path) {
-        listURL = new ArrayList<String>();
+        this.listURL = new ArrayList<String>();
+        this.listName = new ArrayList<String>();
         this.dir = path;
     }
 
     private void parseURL() throws FileNotFoundException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(this.dir)));
 
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(this.dir)));
         String text;
 
         try {
 
             while ((text = reader.readLine()) != null) {
-                Pattern p = Pattern.compile(patternURL, Pattern.CASE_INSENSITIVE);
+                Pattern p = Pattern.compile(this.patternURL, Pattern.CASE_INSENSITIVE);
                 Matcher m = p.matcher(text);
 
                 if (m.find()) {
-                    this.listURL.add(m.group());
+                    int length = m.group().toString().length();
+                    text = m.group().toString().substring(0, length - 12);  //удаляем лишние элементы
+                    this.listURL.add(text);
                 }
             }
 
             reader.close();
         }
         catch (Exception error) {
+            error.printStackTrace();
+        }
+    }
+
+    private void parseName() throws  FileNotFoundException {
+
+        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(this.dir)));
+        String text;
+
+        try {
+            while((text = reader.readLine()) != null) {
+                Pattern p = Pattern.compile(this.patternName, Pattern.CASE_INSENSITIVE);
+                Matcher m = p.matcher(text);
+
+                if (m.find()) {
+                    this.listName.add(m.group(2));
+                }
+            }
+
+            reader.close();
+        }
+        catch(Exception error) {
             error.printStackTrace();
         }
     }
@@ -56,6 +83,19 @@ public class ParserHTML {
         }
 
         return listURL;
+    }
+
+    public ArrayList<String> getName() {
+
+        try {
+            this.parseName();
+        }
+        catch (FileNotFoundException error) {
+            error.printStackTrace();
+        }
+
+        return this.listName;
+
     }
 
 }
