@@ -1,26 +1,29 @@
-import  java.io.*;
+import java.io.*;
 import java.util.ArrayList;
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
-import javax.xml.transform.dom.*;
-import javax.xml.transform.stream.*;
-import org.w3c.dom.*;
+import java.util.Scanner;
 
 import parser.html.ParserHTML;
 import create.xml.CreateXML;
+
 
 public class Main {
 
     public static void main(String[] args) throws FileNotFoundException, ParserConfigurationException, TransformerException {
 
-        long startTime = System.currentTimeMillis();
+        Scanner in = new Scanner(System.in);
 
-        ParserHTML pars = new ParserHTML("/Users/nikita/Documents/bookmarks_chrome.html");
+        System.out.println("Введите путь к html файлу: ");
+
+        ParserHTML pars = new ParserHTML(in.nextLine());
         ArrayList<String> URL = pars.getURL();
         ArrayList<String> name = pars.getName();
         ArrayList<String> date = pars.getDate();
 
-        CreateXML creater = new CreateXML("/Users/nikita/Documents/test.xml");
+        System.out.println("Введите путь сохранения: ");
+
+        CreateXML creater = new CreateXML(in.nextLine());
         creater.init();
 
         for(int i = 0; i < URL.size() - 1; i++) {
@@ -34,6 +37,5 @@ public class Main {
 
         creater.end();
 
-        System.out.println("Time: " + (System.currentTimeMillis() - startTime));
     }
 }
